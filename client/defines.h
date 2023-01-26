@@ -76,6 +76,8 @@ typedef enum
 #define TDNF_REPO_EXT                     ".repo"
 #define TDNF_CONF_FILE                    "/etc/tdnf/tdnf.conf"
 #define TDNF_CONF_GROUP                   "main"
+#define TDNF_CONF_KEY_OCIDOMAIN		  "ocidomain"
+#define TDNF_CONF_KEY_OCIREGION		  "ociregion"
 //Conf file key names
 #define TDNF_CONF_KEY_GPGCHECK            "gpgcheck"
 #define TDNF_CONF_KEY_INSTALLONLY_LIMIT   "installonly_limit"
@@ -131,6 +133,8 @@ typedef enum
 #define TDNF_REPO_BASEURL_FILE_NAME       "baseurl"
 
 // repo defaults
+#define TDNF_DEFAULT_OCIREGION		  ""
+#define TDNF_DEFAULT_OCIDOMAIN		  ""
 #define TDNF_DEFAULT_REPO_LOCATION        "/etc/yum.repos.d"
 #define TDNF_DEFAULT_CACHE_LOCATION       "/var/cache/tdnf"
 #define TDNF_DEFAULT_DISTROVERPKG         "system-release"
@@ -159,6 +163,8 @@ typedef enum
 // var names
 #define TDNF_VAR_RELEASEVER               "$releasever"
 #define TDNF_VAR_BASEARCH                 "$basearch"
+#define TDNF_VAR_OCIREGION                "$ociregion"
+#define TDNF_VAR_OCIDOMAIN		  "$ocidomain"
 /* dummy setopt values */
 #define TDNF_SETOPT_NAME_DUMMY             "opt.dummy.name"
 #define TDNF_SETOPT_VALUE_DUMMY            "opt.dummy.value"

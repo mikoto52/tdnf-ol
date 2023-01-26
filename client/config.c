@@ -74,6 +74,20 @@ TDNFReadConfig(
     dwError = TDNFConfigGetSection(pData, pszGroup, &pSection);
     BAIL_ON_TDNF_ERROR(dwError);
 
+    dwError = TDNFReadKeyValue(
+                  pSection,
+                  TDNF_CONF_KEY_OCIDOMAIN,
+                  TDNF_DEFAULT_OCIDOMAIN,
+                  &pConf->pszVarOciDomain);
+    BAIL_ON_TDNF_ERROR(dwError);
+
+    dwError = TDNFReadKeyValue(
+                  pSection,
+                  TDNF_CONF_KEY_OCIREGION,
+                  TDNF_DEFAULT_OCIREGION,
+                  &pConf->pszVarOciRegion);
+    BAIL_ON_TDNF_ERROR(dwError);
+
     dwError = TDNFReadKeyValueInt(
                   pSection,
                   TDNF_CONF_KEY_INSTALLONLY_LIMIT,
@@ -326,6 +340,8 @@ TDNFConfigReplaceVars(
 {
     uint32_t dwError = 0;
     char* pszDst = NULL;
+    char* pszDst1 = NULL;
+    char* pszDst2 = NULL;
     char* pszReplacedTemp = NULL;
     PTDNF_CONF pConf = NULL;
 
@@ -341,7 +357,9 @@ TDNFConfigReplaceVars(
     /* fill variable values such as release and basearch
        if required */
     if(strstr(*ppszString, TDNF_VAR_RELEASEVER) ||
-       strstr(*ppszString, TDNF_VAR_BASEARCH))
+       strstr(*ppszString, TDNF_VAR_BASEARCH) ||
+   strstr(*ppszString, TDNF_VAR_OCIDOMAIN) ||
+   strstr(*ppszString, TDNF_VAR_OCIREGION))
     {
         pConf = pTdnf->pConf;
         dwError = TDNFReplaceString(
@@ -355,6 +373,20 @@ TDNFConfigReplaceVars(
                       pszReplacedTemp,
                       TDNF_VAR_BASEARCH,
                       pConf->pszVarBaseArch,
+                      &pszDst1);
+        BAIL_ON_TDNF_ERROR(dwError);
+
+        dwError = TDNFReplaceString(
+                      pszDst1,
+                      TDNF_VAR_OCIREGION,
+                      pConf->pszVarOciRegion,
+                      &pszDst2);
+        BAIL_ON_TDNF_ERROR(dwError);
+
+        dwError = TDNFReplaceString(
+                      pszDst2,
+                      TDNF_VAR_OCIDOMAIN,
+                      pConf->pszVarOciDomain,
                       &pszDst);
         BAIL_ON_TDNF_ERROR(dwError);
 
@@ -363,10 +395,14 @@ TDNFConfigReplaceVars(
     }
 cleanup:
     TDNF_SAFE_FREE_MEMORY(pszReplacedTemp);
+    TDNF_SAFE_FREE_MEMORY(pszDst1);
+    TDNF_SAFE_FREE_MEMORY(pszDst2);
     return dwError;
 
 error:
     TDNF_SAFE_FREE_MEMORY(pszDst);
+    TDNF_SAFE_FREE_MEMORY(pszDst1);
+    TDNF_SAFE_FREE_MEMORY(pszDst2);
     goto cleanup;
 }
 

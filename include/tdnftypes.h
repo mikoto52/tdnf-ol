@@ -275,6 +275,8 @@ typedef struct _TDNF_CONF
     char* pszBaseArch;
     char* pszVarReleaseVer;
     char* pszVarBaseArch;
+    char* pszVarOciDomain;
+    char* pszVarOciRegion;
     char** ppszExcludes;
     char** ppszMinVersions;
 }TDNF_CONF, *PTDNF_CONF;
